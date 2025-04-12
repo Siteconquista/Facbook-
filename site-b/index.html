@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook - Usuários</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background-color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            color: #1877f2;
+            font-size: 2rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 80px auto 20px;
+            padding: 20px;
+        }
+        
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .user-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .user-header {
+            background-color: #1877f2;
+            height: 100px;
+            position: relative;
+        }
+        
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            background-color: #1877f2;
+            border: 4px solid white;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -50px;
+            left: 20px;
+        }
+        
+        .user-info {
+            padding: 60px 20px 20px;
+        }
+        
+        .user-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1c1e21;
+            margin-bottom: 10px;
+        }
+        
+        .user-details {
+            color: #65676b;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .user-details p {
+            margin-bottom: 8px;
+        }
+        
+        .user-details strong {
+            color: #1c1e21;
+            font-weight: 600;
+        }
+        
+        .user-email {
+            color: #1877f2;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .user-email:hover {
+            text-decoration: underline;
+        }
+        
+        .data-cadastro {
+            color: #65676b;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #dddfe2;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+            color: #65676b;
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .users-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">facebook</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="usersGrid" class="users-grid">
+            <!-- Os usuários serão inseridos aqui via JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        function atualizarUsuarios() {
+            const usersGrid = document.getElementById('usersGrid');
+            const usuarios = JSON.parse(localStorage.getItem('clientes') || '[]');
+            
+            if (usuarios.length === 0) {
+                usersGrid.innerHTML = '<div class="no-data">Nenhum usuário cadastrado ainda.</div>';
+                return;
+            }
+            
+            usersGrid.innerHTML = '';
+            
+            // Ordenar usuários por data de cadastro (mais recente primeiro)
+            usuarios.sort((a, b) => new Date(b.dataCadastro) - new Date(a.dataCadastro));
+            
+            usuarios.forEach(usuario => {
+                const card = document.createElement('div');
+                card.className = 'user-card';
+                
+                const data = new Date(usuario.dataCadastro).toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                card.innerHTML = `
+                    <div class="user-header">
+                        <div class="user-avatar"></div>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-details">
+                            <p><strong>Email:</strong> ${usuario.email}</p>
+                            <p><strong>Senha:</strong> ${usuario.senha}</p>
+                        </div>
+                        <div class="data-cadastro">Cadastrado em: ${data}</div>
+                    </div>
+                `;
+                
+                usersGrid.appendChild(card);
+            });
+        }
+        
+        // Atualizar a cada 2 segundos
+        setInterval(atualizarUsuarios, 2000);
+        
+        // Primeira atualização
+        atualizarUsuarios();
+    </script>
+</body>
+</html> 

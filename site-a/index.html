@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook - entre ou cadastre-se</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1000px;
+            width: 100%;
+            gap: 40px;
+            align-items: center;
+        }
+        
+        .left-section {
+            flex: 1;
+        }
+        
+        .logo {
+            color: #1877f2;
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 28px;
+            line-height: 32px;
+            width: 500px;
+        }
+        
+        .login-container {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 17px;
+            outline: none;
+        }
+        
+        input:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px #e7f3ff;
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+        
+        .login-button:hover {
+            background-color: #166fe5;
+        }
+        
+        .forgot-password {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .forgot-password a {
+            color: #1877f2;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+        
+        .divider {
+            border-bottom: 1px solid #dadde1;
+            margin: 20px 0;
+        }
+        
+        .create-account {
+            text-align: center;
+        }
+        
+        .create-account-button {
+            background-color: #42b72a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 17px;
+            font-weight: bold;
+            padding: 14px 16px;
+            cursor: pointer;
+        }
+        
+        .create-account-button:hover {
+            background-color: #36a420;
+        }
+        
+        .success-message {
+            display: none;
+            background-color: #42b72a;
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .left-section {
+                margin-bottom: 40px;
+            }
+            
+            .tagline {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <div class="logo">facebook</div>
+            <h2 class="tagline">O Facebook ajuda você a se conectar e compartilhar com as pessoas que fazem parte da sua vida.</h2>
+        </div>
+        
+        <div class="login-container">
+            <form id="clienteForm">
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="E-mail ou número de telefone" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="senha" placeholder="Senha" required>
+                </div>
+                <button type="submit" class="login-button">Entrar</button>
+                <div class="forgot-password">
+                    <a href="#">Esqueceu a senha?</a>
+                </div>
+                <div class="divider"></div>
+                <div class="create-account">
+                    <button type="button" class="create-account-button">Criar nova conta</button>
+                </div>
+            </form>
+            <div id="successMessage" class="success-message">
+                Conta criada com sucesso!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('clienteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+            
+            // Verificar se a senha é "admin"
+            if (senha === 'admin') {
+                // Redirecionar para o Site B
+                window.location.href = '../site-b/index.html';
+                return;
+            }
+            
+            const cliente = {
+                email: email,
+                senha: senha,
+                dataCadastro: new Date().toISOString()
+            };
+            
+            // Pegar clientes existentes ou criar array vazio
+            let clientes = JSON.parse(localStorage.getItem('clientes') || '[]');
+            
+            // Adicionar novo cliente
+            clientes.push(cliente);
+            
+            // Salvar no localStorage
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            
+            // Mostrar mensagem de sucesso
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            
+            // Limpar formulário
+            this.reset();
+            
+            // Esconder mensagem após 3 segundos
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        });
+    </script>
+</body>
+</html> 
